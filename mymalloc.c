@@ -134,7 +134,7 @@ void splitBlockAtSize(mblock_t * block, size_t newSize) {
     size_t neededSize = newSize + MBLOCK_HEADER_SZ;
 
     // if the mblock is not large enought to split into two, just allocate the whole mblock
-    if (totalSize < needed + MBLOCK_HEADER_SZ + 1) {
+    if (totalSize < neededSize + MBLOCK_HEADER_SZ + 1) {
       block->status = 1;
       return;
     }
@@ -154,7 +154,7 @@ void splitBlockAtSize(mblock_t * block, size_t newSize) {
     }
     
     // update the given block
-    block->next = newBlock
+    block->next = newBlock;
     block->size = newSize;
     block->status = 1; // set to allocated
 }
