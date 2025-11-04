@@ -63,7 +63,7 @@ void * mymalloc(size_t size) {
     block = growHeapBySize(size);
     
     if (block == NULL) {
-      return NULL; // srbk failed
+      return NULL; // sbrk failed
     }
   }
 
@@ -79,7 +79,7 @@ void myfree(void * ptr) {
 
   // input validation
   if (ptr == NULL) {
-    return NULL;
+    return;
   }
 
   // move ptr back to the block header
@@ -87,7 +87,7 @@ void myfree(void * ptr) {
 
   // sanity check: ensure operating withing heap bounds
   void * heapEnd = sbrk(0);
-  if ((void *)block < (void *)mlist.head || (void *)block >= headEnd) {
+  if ((void *)block < (void *)mlist.head || (void *)block >= heapEnd) {
     printf("myfree error: invalid pointer\n");
     return;
   }
