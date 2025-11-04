@@ -1,8 +1,8 @@
 mymalloc: mymalloc.o
-	gcc mymalloc.o -o mymalloc -pthread -lrt
+	gcc mymalloc.o -o mymalloc -pedantic
 
 mymalloc.o: mymalloc.c
-	gcc -c mymalloc.c -Wall -pthread -lrt
+	gcc -c mymalloc.c -Wall -pedantic
 
 clean_csv:
 	rm *.csv
