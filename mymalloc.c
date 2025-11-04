@@ -37,16 +37,24 @@ int main(int argc, char* argv[]) {
   void * p3 = mymalloc(200);
   void * p4 = mymalloc(500);
 
+  printMemList(mlist.head);
+
   myfree(p3); p3 = NULL;
   myfree(p2); p2 = NULL;
 
+  printMemList(mlist.head);
+
   void * p5 = mymalloc(150);
   void * p6 = mymalloc(500);
+
+  printMemList(mlist.head);
 
   myfree(p4); p4 = NULL;
   myfree(p5); p5 = NULL;
   myfree(p6); p6 = NULL;
   myfree(p1); p1 = NULL;
+
+  printMemList(mlist.head);
 }
 
 void * mymalloc(size_t size) {
