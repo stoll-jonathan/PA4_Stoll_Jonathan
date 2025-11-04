@@ -51,10 +51,51 @@ int main(int argc, char* argv[]) {
 
 void * mymalloc(size_t size) {
 
+  // input validation
+  if (size == 0) {
+    return NULL;
+  }
+  
+  // find free block if possible, if not try growing the heap
+  mblock_t * block = findFreeBlockOfSize(size);
+
+  if (block == NULL) {
+    block = growHeapBySize(size);
+    
+    if (block == NULL) {
+      return NULL; // srbk failed
+    }
+  }
+
+  // split blocks if possible to minimize fragmentation
+  splitBlockAtSize(block, size);
+
+  // mark block as allocated and return payload
+  block->status = 1;
+  return block->payload;
 }
 
 void myfree(void * ptr) {
 
+  // input validation
+  if (ptr == NULL) {
+    return NULL;
+  }
+
+  // move ptr back to the block header
+  mblock_t * block = (mblock_t *)((char *)ptr - MBLOCK_HEADER_SZ);
+
+  // sanity check: ensure operating withing heap bounds
+  void * heapEnd = sbrk(0);
+  if ((void *)block < (void *)mlist.head || (void *)block >= headEnd) {
+    printf("myfree error: invalid pointer\n");
+    return;
+  }
+
+  // mark block as free and coalesce if possible
+  block->status = 0;
+  coallesceBlockNext(block);
+  coallesceBlockPrev(block);
 }
 
 // return the last block in memlist, used when we extend the heap with sbrk
